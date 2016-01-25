@@ -1,6 +1,6 @@
-import sbt._
+//import sbt._
 import sbtassembly.AssemblyPlugin._
-import com.typesafe.sbt.packager.archetypes._
+//import com.typesafe.sbt.packager.archetypes._
 
 val artifactId        = "maven-badge"
 val buildOrganization = "com.github.y2k2mt"
