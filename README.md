@@ -12,13 +12,13 @@ $ bin/run.sh
 # Obtaining a badge 
 
 ```
-$ curl localhost:9000/maven-central/[groupId]/[artifactId]/badge.svg
+$ curl localhost:8000/maven-central/[groupId]/[artifactId]/badge.svg
 ```
  
 # Redirecting to an artifact details 
 
 ```
-$ curl localhost:9000/maven-central/[groupId]/[artifactId]
+$ curl localhost:8000/maven-central/[groupId]/[artifactId]
 ```
 
 # Deploying to Heroku 
