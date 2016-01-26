@@ -22,6 +22,8 @@ val asmSettings = assemblySettings ++ Seq (
 
 val allDependencies = Seq (
   "org.analogweb" %% "analogweb-scala" % "0.9.11", 
+//  "org.analogweb" % "analogweb-slf4j" % "0.9.11", 
+//  "ch.qos.logback" % "logback-classic" % "1.1.3",
   "net.databinder.dispatch" %% "dispatch-core" % "0.11.2" 
 )
 
