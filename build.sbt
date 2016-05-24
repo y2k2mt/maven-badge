@@ -21,10 +21,11 @@ val asmSettings = assemblySettings ++ Seq (
 )
 
 val allDependencies = Seq (
-  "org.analogweb" %% "analogweb-scala" % "0.9.11", 
-//  "org.analogweb" % "analogweb-slf4j" % "0.9.11", 
-//  "ch.qos.logback" % "logback-classic" % "1.1.3",
-  "net.databinder.dispatch" %% "dispatch-core" % "0.11.2" 
+  "org.analogweb" %% "analogweb-scala" % "0.9.12", 
+  "org.analogweb" % "analogweb-slf4j" % "0.9.12", 
+  "org.analogweb" % "analogweb-netty" % "0.9.12", 
+  "ch.qos.logback" % "logback-classic" % "1.1.7",
+  "net.databinder.dispatch" %% "dispatch-core" % "0.11.2"
 )
 
 val allResolvers = Seq (
@@ -39,7 +40,7 @@ lazy val mavenBadge = Project (
     resolvers ++= allResolvers,
     libraryDependencies ++= allDependencies,
     fork in run := true,
-    javaOptions in run += "-Xmx256M",
+    javaOptions in run ++= Seq("-Xmx64M","-XX:PermSize=64M","-XX:MaxPermSize=64M"),
     artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
           artifact.name + "-" + module.revision + "." + artifact.extension
     }
