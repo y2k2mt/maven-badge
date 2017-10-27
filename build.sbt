@@ -2,8 +2,8 @@ import sbtassembly.AssemblyPlugin._
 
 val artifactId        = "maven-badge"
 val buildOrganization = "com.github.y2k2mt"
-val buildVersion      = "0.1.0"
-val buildScalaVersion = "2.11.7"
+val buildVersion      = "0.2.0"
+val buildScalaVersion = "2.12.4"
 
 val buildSettings = Defaults.defaultSettings ++ Seq (
   organization := buildOrganization,
@@ -21,11 +21,12 @@ val asmSettings = assemblySettings ++ Seq (
 )
 
 val allDependencies = Seq (
-  "org.analogweb" %% "analogweb-scala" % "0.9.12", 
-  "org.analogweb" % "analogweb-slf4j" % "0.9.12", 
-  "org.analogweb" % "analogweb-netty" % "0.9.12", 
+  "org.analogweb" %% "analogweb-scala" % "0.10.1", 
+  "org.analogweb" %% "analogweb-json4s" % "0.10.1", 
+  "org.analogweb" % "analogweb-slf4j" % "0.10.1", 
+  "org.analogweb" % "analogweb-netty" % "0.10.1", 
   "ch.qos.logback" % "logback-classic" % "1.1.7",
-  "net.databinder.dispatch" %% "dispatch-core" % "0.11.2"
+  "net.databinder.dispatch" %% "dispatch-core" % "0.13.1"
 )
 
 val allResolvers = Seq (

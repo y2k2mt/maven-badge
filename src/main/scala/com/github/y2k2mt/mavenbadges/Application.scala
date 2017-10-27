@@ -4,29 +4,28 @@ import java.net.URI
 import scala.collection.JavaConversions._
 import org.analogweb.core.Servers
 import org.analogweb.core.response._
-import org.analogweb.scala._
-import dispatch._, Defaults._
-import org.json4s._
-import org.json4s.jackson.JsonMethods._
+import analogweb._, json4s._
+import dispatch._
+import org.json4s._, jackson.JsonMethods._
 
-object Application extends Analogweb {
+object Application {
 
   def main(args: Array[String]) = {
     val port = sys.props.get("http.port").getOrElse("8000")
-    val uri = "http://0.0.0.0:" + port.toInt
-    Servers.create(uri, "com.github.y2k2mt.mavenbadge").run
+    val uri = "0.0.0.0"
+    http(uri, port.toInt)(routes).run
   }
 
-  get("/maven-central/{group}/{artifact}") { implicit r =>
-    latestVersionOnMavenCentral(param("artifact"), param("group")) { version =>
-      val to = s"http://search.maven.org/#artifactdetails|${param("group")}|${param("artifact")}|${version}|"
-      Status(asText(to), 302).withHeader(Map("Location" -> to))
-    }
-  }
-
-  get("/maven-central/{group}/{artifact}/badge.svg") { implicit r =>
-    latestVersionOnMavenCentral(param("artifact"), param("group"))(version => Ok(asSvg(version)))
-  }
+  val routes =
+    get("/maven-central/{group}/{artifact}") { implicit r =>
+      latestVersionOnMavenCentral(param("artifact"), param("group")) { version =>
+        val to = s"http://search.maven.org/#artifactdetails|${param("group")}|${param("artifact")}|${version}|"
+        Status(302, asText(to)).withHeader(Map("Location" -> to))
+      }
+    } ++
+      get("/maven-central/{group}/{artifact}/badge.svg") { implicit r =>
+        latestVersionOnMavenCentral(param("artifact"), param("group"))(version => Ok(asSvg(version)))
+      }
 
   private[this] def latestVersionOnMavenCentral[R](a: String, g: String)(f: String => R) = {
     val central = url(s"http://search.maven.org/solrsearch/select?q=a:%22${a}%22%20g:%22${g}%22&wt=json")
