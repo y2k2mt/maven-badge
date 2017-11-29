@@ -1,12 +1,12 @@
-package com.github.y2k2mt.mavenbadge
+package mavenbadge
 
 import java.net.URI
 import scala.collection.JavaConversions._
 import org.analogweb.core.Servers
 import org.analogweb.core.response._
-import analogweb._, json4s._
+import analogweb._, circe._
 import dispatch._
-import org.json4s._, jackson.JsonMethods._
+import io.circe._, io.circe.parser._
 
 object Application {
 
@@ -31,17 +31,9 @@ object Application {
     val central = url(s"http://search.maven.org/solrsearch/select?q=a:%22${a}%22%20g:%22${g}%22&wt=json")
     val jsonText = for (result <- Http(central OK as.String)) yield result
     jsonText map { txt =>
-      val parsedJson = parse(txt)
-      val latest = for {
-        JObject(child) <- parsedJson
-        JField("response", JObject(response)) <- child
-        JField("numFound", JInt(numFound)) <- response
-        JField("docs", JArray(docs)) <- response
-        JObject(doc) <- docs if !docs.isEmpty
-        JField("latestVersion", JString(latestVersion)) <- doc
-      } yield latestVersion
-
-      latest.headOption.map(f).getOrElse(NotFound(asText(s"Artifact [${g}:${a}] is not found.")))
+      val parsedJson = (parse(txt).getOrElse(io.circe.Json.Null)).hcursor
+      val latest = parsedJson.downField("response").downField("docs").downArray.downField("latestVersion").as[String]
+      latest.map(f).getOrElse(NotFound(asText(s"Artifact [${g}:${a}] is not found.")))
     }
   }
 
